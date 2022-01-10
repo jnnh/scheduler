@@ -1,9 +1,5 @@
 var taskIDs =["block9","block10","block11","block12","block13","block14","block15","block16","block17"];
 
-$(document).ready(function(){
-    var date = moment().format("dddd MMM Do YYYY");
-    $("#currentDay").text(date);
-});
 //save Button clicked
 $(".saveBtn").on("click", function(){
     var taskEl = $(this).closest(".time-block").find(".description");
@@ -16,30 +12,37 @@ $(".saveBtn").on("click", function(){
 //load tasks from local Storage
 var loadTasks = function(){
     taskIDs.forEach(function(element){
-        $("'#"+element+"'").val(localStorage.getItem(element));
+        $(`#${element}`).val(localStorage.getItem(element));
     });
 };
-
 
 var auditTime = function (timeBlockEl){
     var hour = $(timeBlockEl).find(".hour").attr("id").replace("hr", "");
     var time = moment().hour();
     if (hour<time){
+        $(timeBlockEl).removeClass("present future");
         $(timeBlockEl).addClass("past");
     }
     else if (hour===time){
+        $(timeBlockEl).removeClass("past future");
         $(timeBlockEl).addClass("present");
     }
     else{
+        $(timeBlockEl).removeClass("present past");
         $(timeBlockEl).addClass("future");
     }
 }
 
+$(document).ready(function(){
+    var date = moment().format("dddd MMM Do YYYY");
+    $("#currentDay").text(date);
+});
+
 loadTasks();
 
 
-// setTimeout(function(){
+// setInterval(function(){
 //     $(".time-block").each(function(index, el){
 //       auditTime(el);
 //     });
-//   }, 1000);
+//   }, (1000*60)*30;
