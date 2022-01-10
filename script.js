@@ -17,21 +17,28 @@ var loadTasks = function(){
 };
 
 var auditTime = function (timeBlockEl){
-    var hour = $(timeBlockEl).find(".hour").attr("id").replace("hr", "");
+    var hour = parseInt($(timeBlockEl).find(".hour").attr("id").replace("hr", ""));
     var time = moment().hour();
     if (hour<time){
         $(timeBlockEl).removeClass("present future");
         $(timeBlockEl).addClass("past");
+
     }
     else if (hour===time){
         $(timeBlockEl).removeClass("past future");
         $(timeBlockEl).addClass("present");
+        console.log("present");
     }
     else{
         $(timeBlockEl).removeClass("present past");
         $(timeBlockEl).addClass("future");
     }
 }
+//When the user clicks anywhere
+$(document).on("click", function() {
+    //reload our tasks
+    loadTasks();
+})
 
 $(document).ready(function(){
     var date = moment().format("dddd MMM Do YYYY");
@@ -39,10 +46,13 @@ $(document).ready(function(){
 });
 
 loadTasks();
+$(".time-block").each(function(index, el){
+    console.log(el);
+    auditTime(el);
+});
 
-
-// setInterval(function(){
-//     $(".time-block").each(function(index, el){
-//       auditTime(el);
-//     });
-//   }, (1000*60)*30;
+setInterval(function(){
+    $(".time-block").each(function(index, el){
+      auditTime(el);
+    });
+  }, (1000*60)*30);
